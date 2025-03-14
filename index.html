@@ -37,31 +37,69 @@
     sidebarContent.classList.toggle('hidden');
     sidebarIcons.classList.toggle('hidden');
   }
+
+  function autoMinimizeSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const sidebarContent = document.getElementById('sidebar-content');
+  const sidebarIcons = document.getElementById('sidebar-icons');
+
+  // Hide sidebar completely on (medium) and very small screens
+  if (window.innerWidth < 768) {
+    sidebar.classList.add('hidden');
+  } else {
+    sidebar.classList.remove('hidden');
+    
+    // Minimize sidebar on medium screens
+    if (window.innerWidth < 1287) {
+      sidebar.classList.add('w-16');
+      sidebar.classList.remove('md:w-64');
+      sidebarContent.classList.add('hidden');
+      sidebarIcons.classList.remove('hidden');
+    } else {
+      sidebar.classList.remove('w-16');
+      sidebar.classList.add('md:w-64');
+      sidebarContent.classList.remove('hidden');
+      sidebarIcons.classList.add('hidden');
+    }
+  }
+}
+
+  window.addEventListener('resize', autoMinimizeSidebar);
+  window.addEventListener('load', autoMinimizeSidebar);
 </script>
 <body class="bg-gray-900 h-screen flex flex-col">
   <!-- Navigation -->
   <header class="bg-gray-800 shadow-sm sticky top-0 z-10">
-    <div class="container mx-auto px-4 py-3 flex items-center justify-between">
-      <!-- Logo -->
-      <div class="flex items-center space-x-4">
+    <div class="container px-4 py-3 flex items-center justify-between">
+      <!-- Left Section: Hamburger + Logo (Fixed Width) -->
+      <div class="flex items-center space-x-4 w-[200px]">
         <button class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300" onclick="toggleSidebar()">
-          <i class="fas fa-bars text-gray-300"></i>
+            <i class="fas fa-bars text-gray-300"></i>
         </button>
-        <span class="text-red-600 text-xl font-bold">Forum<span class="text-gray-300">Virtron</span></span>
-      </div>
+        <!-- Replacing text with logo -->
+        <img src="logo.png" alt="Virtron Logo" class="h-7">
+    </div>
+  
+      <!-- Search Bar (Centered but Doesn't Push Other Elements) -->
+<!-- Search Bar Section -->
+<div class="flex items-center flex-grow max-w-xl justify-center">
+  <!-- Search Bar (Visible on Small and Larger Screens) -->
+  <div class="hidden sm:flex relative w-full">
+    <input type="text" placeholder="Search topics" class="w-full px-4 py-2 rounded-full border border-gray-700 bg-gray-700 text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-300">
+    <button class="absolute right-3 top-2">
+      <i class="fas fa-search text-gray-400"></i>
+    </button>
+  </div>
 
-      <!-- Search Bar -->
-      <div class="hidden md:flex items-center flex-1 max-w-xl mx-8">
-        <div class="relative w-full">
-          <input type="text" placeholder="Search topics" class="w-full px-4 py-2 rounded-full border border-gray-700 bg-gray-700 text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-300">
-          <button class="absolute right-3 top-2">
-            <i class="fas fa-search text-gray-400"></i>
-          </button>
-        </div>
-      </div>
+  <!-- Search Icon (Only Visible on Small Screens) -->
+  <button class="sm:hidden w-10 h-10 flex items-center justify-center rounded-full bg-gray-700 hover:bg-gray-600 text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-300">
+    <i class="fas fa-search"></i>
+  </button>
+</div>
 
-      <!-- User Controls -->
-      <div class="flex items-center space-x-4">
+  
+      <!-- Right Section: User Controls (Fixed Width) -->
+      <div class="flex items-center space-x-4 w-[200px] justify-end">
         <button class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300">
           <i class="fas fa-plus text-gray-300"></i>
         </button>
@@ -74,10 +112,11 @@
       </div>
     </div>
   </header>
+  
 
   <div class="flex flex-1 overflow-hidden">
     <!-- Sidebar -->
-    <aside id="sidebar" class="w-full md:w-64 bg-gray-800 shadow-md overflow-y-auto transition-all duration-300">
+    <aside id="sidebar" class="hidden md:block w-full md:w-64 bg-gray-800 shadow-md overflow-y-auto transition-all duration-300">
       <div class="p-4">
         <div id="sidebar-content">
           <nav class="space-y-2">
@@ -85,13 +124,21 @@
               <i class="fas fa-home mr-3"></i>
               <span>Home</span>
             </a>
-            <a href="/trending" class="flex items-center p-3 rounded-lg hover:bg-gray-700 text-gray-300">
+            <a href="#" class="flex items-center p-3 rounded-lg hover:bg-gray-700 text-gray-300">
               <i class="fas fa-fire mr-3"></i>
-              <span>Trending</span>
+              <span>Getting Started</span>
             </a>
             <a href="/subscriptions" class="flex items-center p-3 rounded-lg hover:bg-gray-700 text-gray-300">
               <i class="fas fa-star mr-3"></i>
-              <span>Subscriptions</span>
+              <span>Code of Conduct</span>
+            </a>
+            <a href="/trending" class="flex items-center p-3 rounded-lg hover:bg-gray-700 text-gray-300">
+              <i class="fas fa-fire mr-3"></i>
+              <span>Fight Hype</span>
+            </a>
+            <a href="/subscriptions" class="flex items-center p-3 rounded-lg hover:bg-gray-700 text-gray-300">
+              <i class="fas fa-star mr-3"></i>
+              <span>Promoters</span>
             </a>
             <hr class="my-3 border-gray-700">
             <a href="/saved" class="flex items-center p-3 rounded-lg hover:bg-gray-700 text-gray-300">
@@ -100,7 +147,7 @@
             </a>
             <a href="/history" class="flex items-center p-3 rounded-lg hover:bg-gray-700 text-gray-300">
               <i class="fas fa-history mr-3"></i>
-              <span>History</span>
+              <span>PPV</span>
             </a>
           </nav>
 
@@ -118,15 +165,15 @@
             </a>
             <a href="/category/art-design" class="flex items-center p-3 rounded-lg hover:bg-gray-700 text-gray-300">
               <i class="fas fa-paint-brush mr-3"></i>
-              <span>Art & Design</span>
+              <span>Forum</span>
             </a>
             <a href="/category/sports" class="flex items-center p-3 rounded-lg hover:bg-gray-700 text-gray-300">
               <i class="fas fa-futbol mr-3"></i>
-              <span>Sports</span>
+              <span>EAC</span>
             </a>
             <a href="/category/music" class="flex items-center p-3 rounded-lg hover:bg-gray-700 text-gray-300">
               <i class="fas fa-music mr-3"></i>
-              <span>Music</span>
+              <span>FytRec</span>
             </a>
           </nav>
           <div style="height: 500px"></div>
@@ -161,7 +208,7 @@
         <!-- Section 1 -->
         <div class="mb-6">
           <div class="flex items-center mb-4">
-            <h1 class="text-2xl font-bold text-gray-300">Community Development Discussions</h1>
+            <h1 class="text-2xl font-bold text-gray-300">Community Discussions</h1>
             <div class="ml-auto">
               <select class="border border-gray-700 rounded-lg px-3 py-2 bg-gray-800 text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <option class="bg-gray-800">Newest</option>
@@ -175,7 +222,7 @@
             <!-- Topic 1 -->
             <div class="bg-gray-800 rounded-lg shadow-sm overflow-hidden">
               <div class="relative aspect-video bg-gray-700 overflow-hidden">
-                <img src="https://picsum.photos/id/5/200/300" alt="Developing community features for Fight Night Champion fans" class="w-full h-full object-cover transition-transform duration-300 hover:scale-110">
+                <img src="dev.jpg" alt="Developing community features for Fight Night Champion fans" class="w-full h-full object-cover transition-transform duration-300 hover:scale-110">
                 <div class="absolute bottom-2 right-2 bg-black bg-opacity-70 text-white text-xs px-1 rounded">
                   42 comments
                 </div>
@@ -222,7 +269,7 @@
             <!-- Topic 2 -->
             <div class="bg-gray-800 rounded-lg shadow-sm overflow-hidden">
               <div class="relative aspect-video bg-gray-700 overflow-hidden">
-                <img src="https://picsum.photos/id/34/200/300" alt="Incorporating Esports Athletic Commission (EAC) standards into the platform" class="w-full h-full object-cover transition-transform duration-300 hover:scale-110">
+                <img src="EAC.webp" alt="Incorporating Esports Athletic Commission (EAC) standards into the platform" class="w-full h-full object-cover transition-transform duration-300 hover:scale-110">
                 <div class="absolute bottom-2 right-2 bg-black bg-opacity-70 text-white text-xs px-1 rounded">
                   93 comments
                 </div>
@@ -269,7 +316,7 @@
             <!-- Topic 3 -->
             <div class="bg-gray-800 rounded-lg shadow-sm overflow-hidden">
               <div class="relative aspect-video bg-gray-700 overflow-hidden">
-                <img src="https://picsum.photos/id/22/200/300" alt="Building inclusive esports communities for Fight Night Champion" class="w-full h-full object-cover transition-transform duration-300 hover:scale-110">
+                <img src="manager.jpg" alt="Building inclusive esports communities for Fight Night Champion" class="w-full h-full object-cover transition-transform duration-300 hover:scale-110">
                 <div class="absolute bottom-2 right-2 bg-black bg-opacity-70 text-white text-xs px-1 rounded">
                   17 comments
                 </div>
@@ -765,6 +812,231 @@
         
           </div>
         </div>
+
+        <div class="mb-6">
+          <div class="flex items-center mb-4">
+            <h1 class="text-2xl font-bold text-gray-200">Fight Cards</h1>
+          </div>
+        
+          <!-- Fight Card Grid Layout -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+            <!-- Fight Card 1 -->
+            <div class="bg-gray-800 rounded-lg shadow-sm overflow-hidden flex flex-col h-full">
+              <!-- Header with Promoter -->
+              <div class="bg-gray-700 p-3 flex items-center">
+                <div class="h-10 w-10 rounded-full bg-blue-500 flex items-center justify-center text-white text-xs mr-3">
+                  MP
+                </div>
+                <span class="text-gray-300">Metabox_Promotions</span>
+              </div>
+              
+              <!-- Fight Title -->
+              <div class="p-4">
+                <h3 class="font-bold text-lg mb-2 text-gray-300 hover:text-blue-500">
+                  Adrien Broner vs Jovanie Santiago
+                </h3>
+                <p class="text-gray-400 text-sm mb-4">
+                  Date: April 15, 2025 | Time: 10:00 PM ET
+                  <br>Weight Class: Lightweight (135 lbs)
+                  <br>Undercard: Deontay Wilder vs Andy Ruiz Jr.
+                </p>
+              </div>
+        
+              <!-- Fighter Headshots -->
+              <div class="mt-auto p-4 flex justify-between items-center">
+                <div class="flex flex-col items-center">
+                  <img src="https://vince489.github.io/virtronesports/img/EL-MAGO.jpg" alt="Adrien Broner" class="w-24 h-24 rounded-full object-cover mb-2">
+                  <span class="text-gray-300">Adrien Broner</span>
+                </div>
+                <div class="text-gray-300 font-bold">VS</div>
+                <div class="flex flex-col items-center">
+                  <img src="https://vince489.github.io/virtronesports/img/Biddy2.png" alt="Jovanie Santiago" class="w-24 h-24 rounded-full object-cover mb-2">
+                  <span class="text-gray-300">Jovanie Santiago</span>
+                </div>
+              </div>
+            </div>
+        
+            <!-- Fight Card 2 -->
+            <div class="bg-gray-800 rounded-lg shadow-sm overflow-hidden flex flex-col h-full">
+              <!-- Header with Promoter -->
+              <div class="bg-gray-700 p-3 flex items-center">
+                <div class="h-10 w-10 rounded-full bg-red-500 flex items-center justify-center text-white text-xs mr-3">
+                  GL
+                </div>
+                <span class="text-gray-300">Golden Promotions</span>
+              </div>
+              
+              <!-- Fight Title -->
+              <div class="p-4">
+                <h3 class="font-bold text-lg mb-2 text-gray-300 hover:text-blue-500">
+                  Canelo Álvarez vs Gennadiy Golovkin
+                </h3>
+                <p class="text-gray-400 text-sm mb-4">
+                  Date: May 5, 2025 | Time: 9:00 PM ET
+                  <br>Weight Class: Super Middleweight (168 lbs)
+                  <br>Undercard: Ryan Garcia vs Tank Davis
+                </p>
+              </div>
+        
+              <!-- Fighter Headshots -->
+              <div class="mt-auto p-4 flex justify-between items-center">
+                <div class="flex flex-col items-center">
+                  <img src="https://vince489.github.io/virtronesports/img/Keiren-removebg.png" alt="Canelo Álvarez" class="w-24 h-24 rounded-full object-cover mb-2">
+                  <span class="text-gray-300">Canelo Álvarez</span>
+                </div>
+                <div class="text-gray-300 font-bold">VS</div>
+                <div class="flex flex-col items-center">
+                  <img src="https://vince489.github.io/virtronesports/img/el-removebg-preview.png" alt="Gennadiy Golovkin" class="w-24 h-24 rounded-full object-cover mb-2">
+                  <span class="text-gray-300">Gennadiy Golovkin</span>
+                </div>
+              </div>
+            </div>
+        
+            <!-- Fight Card 3 -->
+            <div class="bg-gray-800 rounded-lg shadow-sm overflow-hidden flex flex-col h-full">
+              <!-- Header with Promoter -->
+              <div class="bg-gray-700 p-3 flex items-center">
+                <div class="h-10 w-10 rounded-full bg-green-500 flex items-center justify-center text-white text-xs mr-3">
+                  BP
+                </div>
+                <span class="text-gray-300">Big Punch Promotions</span>
+              </div>
+              
+              <!-- Fight Title -->
+              <div class="p-4">
+                <h3 class="font-bold text-lg mb-2 text-gray-300 hover:text-blue-500">
+                  Tyson Fury vs Oleksandr Usyk
+                </h3>
+                <p class="text-gray-400 text-sm mb-4">
+                  Date: June 12, 2025 | Time: 11:00 PM ET
+                  <br>Weight Class: Heavyweight (over 200 lbs)
+                  <br>Undercard: Anthony Joshua vs Dillian Whyte
+                </p>
+              </div>
+        
+              <!-- Fighter Headshots -->
+              <div class="mt-auto p-4 flex justify-between items-center">
+                <div class="flex flex-col items-center">
+                  <img src="https://vince489.github.io/virtronesports/img/Shakur.jpg" alt="Tyson Fury" class="w-24 h-24 rounded-full object-cover mb-2">
+                  <span class="text-gray-300">Tyson Fury</span>
+                </div>
+                <div class="text-gray-300 font-bold">VS</div>
+                <div class="flex flex-col items-center">
+                  <img src="https://vince489.github.io/virtronesports/img/Ah.jpg" alt="Oleksandr Usyk" class="w-24 h-24 rounded-full object-cover mb-2">
+                  <span class="text-gray-300">Oleksandr Usyk</span>
+                </div>
+              </div>
+            </div>
+        
+            <!-- Fight Card 4 (New) -->
+            <div class="bg-gray-800 rounded-lg shadow-sm overflow-hidden flex flex-col h-full">
+              <!-- Header with Promoter -->
+              <div class="bg-gray-700 p-3 flex items-center">
+                <div class="h-10 w-10 rounded-full bg-purple-500 flex items-center justify-center text-white text-xs mr-3">
+                  TP
+                </div>
+                <span class="text-gray-300">Top Rank Boxing</span>
+              </div>
+              
+              <!-- Fight Title -->
+              <div class="p-4">
+                <h3 class="font-bold text-lg mb-2 text-gray-300 hover:text-blue-500">
+                  Terence Crawford vs Errol Spence Jr.
+                </h3>
+                <p class="text-gray-400 text-sm mb-4">
+                  Date: July 8, 2025 | Time: 9:30 PM ET
+                  <br>Weight Class: Welterweight (147 lbs)
+                  <br>Undercard: Shakur Stevenson vs Oscar Valdez
+                </p>
+              </div>
+        
+              <!-- Fighter Headshots -->
+              <div class="mt-auto p-4 flex justify-between items-center">
+                <div class="flex flex-col items-center">
+                  <img src="https://vince489.github.io/virtronesports/img/Chieffa.png" alt="Terence Crawford" class="w-24 h-24 rounded-full object-cover mb-2">
+                  <span class="text-gray-300">Terence Crawford</span>
+                </div>
+                <div class="text-gray-300 font-bold">VS</div>
+                <div class="flex flex-col items-center">
+                  <img src="https://vince489.github.io/virtronesports/img/Nino.jpg" alt="Errol Spence Jr." class="w-24 h-24 rounded-full object-cover mb-2">
+                  <span class="text-gray-300">Errol Spence Jr.</span>
+                </div>
+              </div>
+            </div>
+        
+            <!-- Fight Card 5 (New) -->
+            <div class="bg-gray-800 rounded-lg shadow-sm overflow-hidden flex flex-col h-full">
+              <!-- Header with Promoter -->
+              <div class="bg-gray-700 p-3 flex items-center">
+                <div class="h-10 w-10 rounded-full bg-yellow-500 flex items-center justify-center text-white text-xs mr-3">
+                  MB
+                </div>
+                <span class="text-gray-300">Matchroom Boxing</span>
+              </div>
+              
+              <!-- Fight Title -->
+              <div class="p-4">
+                <h3 class="font-bold text-lg mb-2 text-gray-300 hover:text-blue-500">
+                  Naoya Inoue vs John Riel Casimero
+                </h3>
+                <p class="text-gray-400 text-sm mb-4">
+                  Date: August 22, 2025 | Time: 7:00 PM ET
+                  <br>Weight Class: Bantamweight (118 lbs)
+                  <br>Undercard: Nonito Donaire vs Nordine Oubaali
+                </p>
+              </div>
+        
+              <!-- Fighter Headshots -->
+              <div class="mt-auto p-4 flex justify-between items-center">
+                <div class="flex flex-col items-center">
+                  <img src="https://vince489.github.io/virtronesports/img/Chico.jpg" alt="Naoya Inoue" class="w-24 h-24 rounded-full object-cover mb-2">
+                  <span class="text-gray-300">Naoya Inoue</span>
+                </div>
+                <div class="text-gray-300 font-bold">VS</div>
+                <div class="flex flex-col items-center">
+                  <img src="https://vince489.github.io/virtronesports/img/Stallion.png" alt="John Riel Casimero" class="w-24 h-24 rounded-full object-cover mb-2">
+                  <span class="text-gray-300">John Riel Casimero</span>
+                </div>
+              </div>
+            </div>
+        
+            <!-- Fight Card 6 (New) -->
+            <div class="bg-gray-800 rounded-lg shadow-sm overflow-hidden flex flex-col h-full">
+              <!-- Header with Promoter -->
+              <div class="bg-gray-700 p-3 flex items-center">
+                <div class="h-10 w-10 rounded-full bg-pink-500 flex items-center justify-center text-white text-xs mr-3">
+                  PB
+                </div>
+                <span class="text-gray-300">Premier Boxing Champions</span>
+              </div>
+              
+              <!-- Fight Title -->
+              <div class="p-4">
+                <h3 class="font-bold text-lg mb-2 text-gray-300 hover:text-blue-500">
+                  Gervonta Davis vs Vasyl Lomachenko
+                </h3>
+                <p class="text-gray-400 text-sm mb-4">
+                  Date: September 18, 2025 | Time: 10:30 PM ET
+                  <br>Weight Class: Lightweight (135 lbs)
+                  <br>Undercard: Jermall Charlo vs David Benavidez
+                </p>
+              </div>
+        
+              <!-- Fighter Headshots -->
+              <div class="mt-auto p-4 flex justify-between items-center">
+                <div class="flex flex-col items-center">
+                  <img src="https://vince489.github.io/virtronesports/img/Krushner.jpg" alt="Gervonta Davis" class="w-24 h-24 rounded-full object-cover mb-2">
+                  <span class="text-gray-300">Gervonta Davis</span>
+                </div>
+                <div class="text-gray-300 font-bold">VS</div>
+                <div class="flex flex-col items-center">
+                  <img src="https://vince489.github.io/virtronesports/img/dot-removebg.png" alt="Vasyl Lomachenko" class="w-24 h-24 rounded-full object-cover mb-2">
+                  <span class="text-gray-300">Vasyl Lomachenko</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>        
         
       </div>
     </main>
